@@ -15,8 +15,8 @@ public class YATextView extends TextView {
 
     private boolean shouldWindowFocusWait;
 
- // putting a comment to try out github and stuff
-    
+ // putting a comment to try out github and stuff <-- this was written on android studio <-- this was done on github website. now commiting on github website.
+    // pull request done. waat next ? 
 
     public YATextView(Context context) {
         super(context);
