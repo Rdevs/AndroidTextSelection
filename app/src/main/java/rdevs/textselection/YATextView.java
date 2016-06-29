@@ -15,9 +15,6 @@ public class YATextView extends TextView {
 
     private boolean shouldWindowFocusWait;
 
- // putting a comment to try out github and stuff <-- this was written on android studio <-- this was done on github website. now commiting on github website.
-    // pull request done. waat next ? 
-
     public YATextView(Context context) {
         super(context);
     }
@@ -35,9 +32,18 @@ public class YATextView extends TextView {
         this.shouldWindowFocusWait = shouldWindowFocusWait;
     }
 
+
+    /**
+     *  This method is called whenever the window focus changes.
+     * @param hasWindowFocus
+     *  if param is true , we do not pass it to super method which will prevent the abrupt finishing of action mode
+     *  if param is false , we pass it to super method which eventually finishes the action mode.
+     *
+     */
     @Override
     public void onWindowFocusChanged(boolean hasWindowFocus) {
-        if(!shouldWindowFocusWait) {
+        if(!shouldWindowFocusWait)
+        {
             super.onWindowFocusChanged(hasWindowFocus);
         }
     }

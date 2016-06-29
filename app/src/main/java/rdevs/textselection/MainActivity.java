@@ -4,7 +4,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -18,11 +17,10 @@ public class MainActivity extends AppCompatActivity {
 
     YATextView tv ;
     TextView tvResult ;
-    SwitchCompat sw ;
     private ActionMode actionMode;
     ActionMode.Callback callback ;
     int mStartIndex = -1 , mEndINdex = -1 ;
-
+      int[] loc = new int[2] ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,21 +39,24 @@ public class MainActivity extends AppCompatActivity {
                 menu.clear();
                 inflater.inflate(R.menu.menu, menu);*/
                 L("OnCreateActionMode");
+
+                /**
+                 *  in sling app code , false is returned. But on devices with 6.0 and above , we will need to return true to show
+                 *  the floating popup menu with custom menu items ???
+                 */
+
                 return true;
             }
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 L("onPrepareActionMode");
-
                 // Inflating here so that default options like Select All , Share are not shown in the contextual menu
-                // If inflated in onCreateActionMode , default options are shown and we dont want that ??
-
+                // If inflated in onCreateActionMode , default options are shown and we don't want that ??
                 MenuInflater inflater = mode.getMenuInflater();
                 menu.clear();
                 inflater.inflate(R.menu.menu, menu);
                 tv.setWindowFocusWait(true);
-
 
                 return true;
             }
@@ -73,18 +74,9 @@ public class MainActivity extends AppCompatActivity {
                 mode.finish();
                 switch (item.getItemId()) {
                     case R.id.m1:
-                        T("cut");
-                        return true;
-                    case R.id.m2:
-                        T("copy");
-                        return true;
-                    case R.id.m3:
-                        T("paste");
-                        return true;
-                    case R.id.m4:
-                        T("whatever");
-                       // tvResult.setText("START "+tv.getSelectionStart()+" END "+tv.getSelectionEnd());
-   tvResult.setText("STRING IS "+tv.getText().toString().substring(mStartIndex,mEndINdex));
+                        tvResult.setText("STRING IS "+tv.getText().toString().substring(mStartIndex,mEndINdex));
+                     //   T(tv.getText().toString().substring(mStartIndex,mEndINdex)+"  Start "+mStartIndex+" End "+mEndINdex+" ");
+                        L("LOGGING "+tv.getText().toString().substring(mStartIndex,mEndINdex));
 
                         return true;
                     default:
@@ -99,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onLongClick(View view) {
 
-
                if (actionMode != null) {
                     return false ;
                 }
@@ -108,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 {
                   actionMode =  startActionMode(callback,ActionMode.TYPE_FLOATING);
                } else {
-
                    actionMode = startActionMode(callback);
                 }
+
                 tv.setCustomSelectionActionModeCallback(callback);
 
                 final TextView textView = (TextView) view;
@@ -118,26 +109,30 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void run() {
-
                         //This works correct on all devices with Android 6.0
                         int startIndex = textView.getSelectionStart();
                         mStartIndex = startIndex ;
-                        //This works wrong on Samsung devices with Android 6.0, result is same as getSelectionStart()
                         int endIndex = textView.getSelectionEnd();
-                            mEndINdex = endIndex ;
-                        //The guard condition where we ignore the empty selections
+                        mEndINdex = endIndex ;
                         if ((endIndex - startIndex) <= 0) {
                             return;
                         }
-
                      //   tvResult.setText("START "+tv.getSelectionStart()+" END "+tv.getSelectionEnd()+ tv.getText().toString().substring(startIndex,endIndex));
-
-                        // Do bunch of things to UI like applying some different foreground colors to the selected word, striking out selected word etc.
                     }
                 }, 200);
-                 return false ;
+                return false ;
             }
+
         });
+
+
+     /*   new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                 tv.performLongClick();
+            }
+        },5000);*/
+
 
     }
 
@@ -145,10 +140,13 @@ public class MainActivity extends AppCompatActivity {
         Log.e("LOG IT",message);
     }
 
-
-    private void T(String text) {
-        Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
-        toast.show();
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        tv.getLocationInWindow(loc);
     }
 
+    private void T(String text) {
+       Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
+    }
 }

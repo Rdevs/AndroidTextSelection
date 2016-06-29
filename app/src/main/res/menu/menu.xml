@@ -1,8 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item  android:title="Cut" android:id="@+id/m1" android:icon="@android:drawable/ic_menu_agenda">Cut</item>
-    <item  android:title="Copy" android:id="@+id/m2" android:icon="@android:drawable/ic_menu_agenda">Copy</item>
-    <item  android:title="Paste" android:id="@+id/m3" android:icon="@android:drawable/ic_menu_agenda">Paste</item>
-    <item  android:title="Whatever" android:id="@+id/m4" android:icon="@android:drawable/ic_menu_agenda">Whatever</item>
-
+    <item  android:title="GET WORD" android:id="@+id/m1" ></item>
 </menu>
