@@ -57,6 +57,7 @@ public class LongPressTest extends ActivityInstrumentationTestCase2<MainActivity
 
         assertEquals("STRING IS text",test_val);
         Log.e("<-- STRING VALUE IS -->", test_val+"");
+        // creating a pull request for this change. lol
         solo.sleep(2000);
 
     }
